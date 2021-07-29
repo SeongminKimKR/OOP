@@ -1,15 +1,18 @@
 package OOP.core.order;
 
 import OOP.core.discount.DiscountPolicy;
-import OOP.core.discount.FixDiscountPolicy;
 import OOP.core.member.Member;
 import OOP.core.member.MemberRepository;
-import OOP.core.member.MemoryMemberRepository;
 
 public class OrderServiceImpl implements OrderService {
 
-    private final MemberRepository memberRepository = new MemoryMemberRepository();
-    private final DiscountPolicy discountPolicy = new FixDiscountPolicy();
+    private final MemberRepository memberRepository;
+    private final DiscountPolicy discountPolicy; //DIP 원칙을 위배하지 않음
+
+    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
+        this.memberRepository = memberRepository;
+        this.discountPolicy = discountPolicy;
+    }
 
     @Override
     public Order createOrder(Long memberId, String itemName, int itemPrice) {
