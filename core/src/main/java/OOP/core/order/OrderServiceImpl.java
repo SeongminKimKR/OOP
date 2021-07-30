@@ -3,6 +3,7 @@ package OOP.core.order;
 import OOP.core.discount.DiscountPolicy;
 import OOP.core.member.Member;
 import OOP.core.member.MemberRepository;
+import OOP.core.member.MemoryMemberRepository;
 
 public class OrderServiceImpl implements OrderService {
 
@@ -20,5 +21,10 @@ public class OrderServiceImpl implements OrderService {
         int discountPrice = discountPolicy.discount(member, itemPrice);
 
         return new Order(memberId, itemName, itemPrice, discountPrice);
+    }
+
+    //테스트 용도
+    public MemberRepository getMemberRepository() {
+        return memberRepository;
     }
 }
