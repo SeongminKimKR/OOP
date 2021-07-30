@@ -4,12 +4,17 @@ import OOP.core.discount.DiscountPolicy;
 import OOP.core.member.Member;
 import OOP.core.member.MemberRepository;
 import OOP.core.member.MemoryMemberRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+
+@Component
 public class OrderServiceImpl implements OrderService {
 
     private final MemberRepository memberRepository;
     private final DiscountPolicy discountPolicy; //DIP 원칙을 위배하지 않음
 
+    @Autowired
     public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
         this.memberRepository = memberRepository;
         this.discountPolicy = discountPolicy;
