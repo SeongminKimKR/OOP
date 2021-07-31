@@ -23,7 +23,8 @@ public class BeanLifeCycleTest {
          * destroyMethod는 추론기능으로 인해 close , shutdown 라는 이름의 메서드를 자동으로 호출해준다.
          * destroyMehtod = "" 공백을 넣으면 추론기능을 사용하지 않게 됨
          */
-        @Bean(initMethod = "init", destroyMethod = "close")
+        //@Bean(initMethod = "init", destroyMethod = "close")
+        @Bean
         public NetworkClient networkClient() {
             NetworkClient networkClient = new NetworkClient();
             networkClient.setUrl("http://OOP.dev");
