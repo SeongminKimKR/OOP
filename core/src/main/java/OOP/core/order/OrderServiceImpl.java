@@ -1,14 +1,19 @@
 package OOP.core.order;
 
+import OOP.core.annotation.MainDiscountPolicy;
 import OOP.core.discount.DiscountPolicy;
 import OOP.core.member.Member;
 import OOP.core.member.MemberRepository;
 import OOP.core.member.MemoryMemberRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 
 @Component
+//final이 붙은 객체들을 파라미터로 하는 생성자를 만들어 줌
+//@RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
 
     /**
@@ -16,14 +21,12 @@ public class OrderServiceImpl implements OrderService {
      */
     //@Autowired
     private final MemberRepository memberRepository;
-    //@Autowired
     private final DiscountPolicy discountPolicy; //DIP 원칙을 위배하지 않음
 
     /**
      * 생성자 주입
      */
-    @Autowired
-    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
+    public OrderServiceImpl(MemberRepository memberRepository, @MainDiscountPolicy DiscountPolicy discountPolicy) {
         this.memberRepository = memberRepository;
         this.discountPolicy = discountPolicy;
     }
@@ -46,7 +49,7 @@ public class OrderServiceImpl implements OrderService {
         this.memberRepository = memberRepository;
     }
 
-    /@Autowired
+    @Autowired
     public void setDiscountPolicy(DiscountPolicy discountPolicy) {
         this.discountPolicy = discountPolicy;
     }*/
