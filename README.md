@@ -169,6 +169,8 @@ OCP를 위반하게 되어 코드의 유연성이 떨어지게 된다.
  - @Configuration 어노테이션이 있어야 싱글톤을 보장한다.
     - 이 어노테이션이 없다면 이미 존재하는 빈을 체크하고 같은 인스턴스에 대해 또 다시 호출하게 되어 싱글톤을 보장하지 않는다.
     - 이 어노테이션은 해당 설정 정보를 상속받는 클래스를 따로 만들어서 등록할 빈의 중복체크를 하는 코드가 동적을 생성된다.
+
+---
 ### 컴포넌트 스캔
 
 #### @ComponentScan, @Component, @Autowired
@@ -201,8 +203,68 @@ OCP를 위반하게 되어 코드의 유연성이 떨어지게 된다.
 - 수동 등록과 자동 등록에서 이름이 겹친다면 수동 등록을 우선시 등록하고 겹치는 자동 등록은 오버라이딩 된다.
 - 스프링 부트 실행시 오류가 발생한다.
 
+---
+
 ### 의존관계 자동 주입
 
+#### 방법
+- @Autowired는 생성자가 한개만 있다면 생략가능
+```
+    /**
+     * 필드 주입
+     */
+    //@Autowired
+    private final MemberRepository memberRepository;
+    private final DiscountPolicy discountPolicy; //DIP 원칙을 위배하지 않음
+
+    /**
+     * 생성자 주입
+     */
+    public OrderServiceImpl(MemberRepository memberRepository, @MainDiscountPolicy DiscountPolicy discountPolicy) {
+        this.memberRepository = memberRepository;
+        this.discountPolicy = discountPolicy;
+    }
+
+    /**
+     * 일반 메서드 주입
+     */
+    @Autowired
+    public void init(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
+        this.memberRepository = memberRepository;
+        this.discountPolicy = discountPolicy;
+    }
+
+
+    /**
+     * 세터주입
+     */
+    @Autowired
+    public void setMemberRepository(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
+    }
+
+    @Autowired
+    public void setDiscountPolicy(DiscountPolicy discountPolicy) {
+        this.discountPolicy = discountPolicy;
+    }
+```
+- 생성자 주입
+    - 불변, 필수 의존관계에 사용
+- 수정자(세터) 주입
+    - 선택, 변경 가능성이 있는 의존관계에 사용
+- 필드 주입
+    - 코드가 간결하지만, 변경이 불가능하여 테스트가 힘들다
+    - DI 프레임워크가 없으면 아무것도 할 수 없다.
+    - @Configuration 같은 곳에서만 특별한 용도로 사용
+- 일만 메서드 주입
+    - 한번에 여러 필드를 주입 받을 수 있다.
+    - 일반적으로 잘 사용하지 않음
+
+#### 자동, 수동의 올바를 실무 운영 기준
+
+- 편리한 자동 기능을 기본으로 사용하자
+- 수동 빈은 애플리케이션에 광범위하게 영향을 미치는 기술 지원 객체를 수동 빈으로 등록하자
+- 또는 비즈니스 로직중에서 다형성을 적극 활용할 때 해당 객체들을 특정 패키지에 묶어서 관리하자.
 ### 빈 생명주기 콜백
 
 ### 빈 스코프
