@@ -11,7 +11,7 @@ import java.util.UUID;
 @Component
 //Provider와 쓰는것과 같이 결과를 나타냄
 //MyLogger의 가짜 프록시 클래스를 만들어두고 HTTP request와 상관 없이 가짜 프록시 클래스를 다른 빈에 미리 주입해 둘 수 있다.
-@Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
+    @Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class MyLogger {
 
     private String uuid;
