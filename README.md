@@ -51,7 +51,14 @@
 -  클라이언트 코드의 변경 없이 기능 확장
 -  애플리케이션을 개발하는 과정에서 부품을 교체하듯이 개발
 
-
+ #### 클래스 모델링
+ ![class_diagram.png](./image/class_diagram.png)
+ 
+ - OrderService라는 역할과 구체인 OrderServiceImpl을 나눔
+ - OrderServiceImpl은 저장소인 MemberRepository와 할인정책인 DiscountPolicy
+ - 결과적으로 OrderServiceImpl이라는 클라이언트는 어떤 저장소와 할인정책을 사용할지 모르고 외부에서 설정한 것들을 사용하게 되어있음
+ - DIP 의존관계 역전 원칙을 지켰다고 할 수 있다. 
+ 
 ### 스프링 컨테이너와 스프링 빈
 
 ### 싱글톤 컨테이너
