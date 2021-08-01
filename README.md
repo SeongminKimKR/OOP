@@ -97,17 +97,17 @@ ApplicationContext applicationContext =new AnnotationConfigApplicationContext(Ap
 
 #### 스프링 컨테이너의 생성과정
 1. 스프링 컨테이너 생성
-![class_diagram.png](./image/chapter2/container1.png)
+![container1.png](./image/chapter2/container1.png)
 
     - 바로 직전 컨테이너 생성 코드를 통해 스프링 컨테이너가 생성되었고 빈 저장소는 비어있다.
 
 2. 스프링 빈 등록
-![class_diagram.png](./image/chapter2/container2.png)
+![container2.png](./image/chapter2/container2.png)
 
     - AppConfig에 @Bean 어노테이션이 붙은 자바 메소드를 호출하여 스프링 빈을 등록한다.
     
 3. 스프링 빈 의존관계 설정
-![class_diagram.png](./image/chapter2/container3.png)
+![container3.png](./image/chapter2/container3.png)
     
     - 컨테이너 설정 정보를 참고해서 의존관계를 주입 한다.
     - 단순히 이전에 자바코드로써 의존관계를 주입한 것에 비해 스프링 컨테이너는 싱글톤 컨테이너 이다.
@@ -124,7 +124,7 @@ ApplicationContext applicationContext =new AnnotationConfigApplicationContext(Ap
 
 #### BeanFactory와 ApllicationContext
 
-![class_diagram.png](./image/chapter2/container4.png)
+![container4.png](./image/chapter2/container4.png)
 - BeanFatory
 
     - 스프링 컨테이너 최상위 인터페이스로써,  스프링 빈을 관리하고 조회하는 역할을 담당한다.
@@ -137,7 +137,7 @@ ApplicationContext applicationContext =new AnnotationConfigApplicationContext(Ap
     
 #### 다양한 설정 형식 지원
 
-![class_diagram.png](./image/chapter2/container5.png)
+![container5.png](./image/chapter2/container5.png)
 - 스프링은 BeanDefintion이라는 **빈 설정 메타정보**를 추상화 시켰기 떄문에 다양한 설정 형식을 지원한다.
 - 이러한 기능을 설계한 것 역시 객체 지향 설계라고 할 수 있다.
 ### 싱글톤 컨테이너
