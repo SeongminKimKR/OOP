@@ -290,4 +290,60 @@ OCP를 위반하게 되어 코드의 유연성이 떨어지게 된다.
         - 스프링에서 가장 권장하는 방법이다.
         - 자바 표준 기술이다.
         - 외부 라이브러리에 적용하지 못한다는 유일한 단점이 있다.
+        
+---
+
 ### 빈 스코프
+ - 빈 스코프란 빈이 존재할 수 있는 범위를 의미한다.
+ 
+ #### 스코프 종류
+ - 싱글톤: 기본 스코프로써 스프링 컨테이너의 시작과 종료까지 유지되는 가장 넓은 범위의 스코프이다.
+    - 이 스코프의 빈을 요청하면 항상 같은 객체 인스턴스를 반환한다.
+ - 프로토타입: 스프링 컨테이너는 프로토탑 빈의 생성과 의존관계 주입까지만 관여하고 더는 관리하지 않는 매우 짧은 범위의 스코프이다.
+    - 새로운 클라이언트 마다 새로운 프로토타입 빈을 생성하여 의존관계를 주입하고 반환한다.
+ 
+ ![prototye.PNG](./image/chapter8/prototype.png)
+
+ - 웹 관련 스코프
+    - request:웹 요청이 들어오고 나갈때 까지 유지되는 스코프.
+    - session:웹 세션이 생성되고 종료될 때 까지 유지되는 스코프.
+    - application: 웹의 서블리 컨텍스와 같은 범위로 유지되는 스코프. 
+    
+#### 싱글톤 빈과 프로토 타입 빈을 함께 사용시 문제점
+ ![prototye2.PNG](./image/chapter8/prototype2.png)
+ ![prototye3.PNG](./image/chapter8/prototype3.png)
+- clientBean이 내부에 가지고 있는 프로토타입 빈은 이미 과거에 주입이 끝난 빈이다. 
+또한 clientBean은 싱글톤 스코프 이기 때문에 처음 스프링을 실행했을때만 만들어지고 다시 생성되지 않는다.
+- 이 문제를 해결하기 위한 가장 간단한 방법은 싱글톤 빈이 프로토타입을 사용할 때 마다 스프링 컨테이너에 새로 요청하는 것이다.
+
+#### ObjectFactory<>, ObjectProvider<>, Provider<> 사용하여 해결
+```
+static class ClientBean {
+
+        /*@Autowired
+        private ObjectFactory<PrototypeBean> prototypeBeanProvider;
+        private ObjectProvider<PrototypeBean> prototypeBeanProvider;*/
+
+        @Autowired
+        private Provider<PrototypeBean> provider;
+
+        /**
+         * 생성자 주입
+         */
+        /*@Autowired
+        public ClientBean(ObjectProvider<PrototypeBean> prototypeBeanProvider) {
+            this.prototypeBeanProvider = prototypeBeanProvider;
+        }*/
+
+        public int logic() {
+            //PrototypeBean prototypeBean = prototypeBeanProvider.getObject();
+            PrototypeBean prototypeBean = provider.get();
+            prototypeBean.addCount();
+            return prototypeBean.getCount();
+        }
+    }
+```
+#### 웹 스코프
+
+ ![web1.PNG](./image/chapter8/web1.png)
+- 웹스코프는 웹환경에서만 동작하며, 스프링이 해당 스코프의 종료시점 까지 관리한다.
