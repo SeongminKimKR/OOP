@@ -52,15 +52,94 @@
 -  애플리케이션을 개발하는 과정에서 부품을 교체하듯이 개발
 
  #### 클래스 모델링
- ![class_diagram.png](./image/class_diagram.png)
+ ![class_diagram.png](./image/chapter1/class_diagram.png)
  
  - OrderService라는 역할과 구체인 OrderServiceImpl을 나눔
  - OrderServiceImpl은 저장소인 MemberRepository와 할인정책인 DiscountPolicy
  - 결과적으로 OrderServiceImpl이라는 클라이언트는 어떤 저장소와 할인정책을 사용할지 모르고 외부에서 설정한 것들을 사용하게 되어있음
  - DIP 의존관계 역전 원칙을 지켰다고 할 수 있다. 
  
+ #### DI 컨테이너 실제 코드
+```java
+public class AppConfig {
+
+    public MemberService memberService() {
+        return new MemberServiceImpl(memberRepository());
+    }
+
+    private MemberRepository memberRepository() {
+        return new MemoryMemberRepository();
+    }
+
+    public OrderService orderService() {
+        return new OrderServiceImpl(
+                memberRepository(),
+                discountPolicy());
+    }
+
+    public DiscountPolicy discountPolicy() {
+        return new FixDiscountPolicy();
+    }
+
+}
+```
+- 스프링 컨테이너를 사용하지 않은 순수 자바코드로써 객체를 생성하고 의존관계를 주입하였다.
+- AppConfig와 같은 설정 정보가 만들어져 있다면 **실제 코드를 변경하지 않고 필요한 기능을 이곳에 추가**할 수 있다.
+---
+
 ### 스프링 컨테이너와 스프링 빈
 
+#### OrderApp.java 와 MemberApp.java에 스프링 컨테이너 생성후 적용
+```
+ApplicationContext applicationContext =new AnnotationConfigApplicationContext(AppConfig.class);
+```
+- ApplicationContext는 스프링 컨테이너의 인터페이스고 자바 기반 설정클래스인 AppConfig를 구현체인 AnnotationConfigApplicationContext로써 생성했다.
+
+#### 스프링 컨테이너의 생성과정
+1. 스프링 컨테이너 생성
+![class_diagram.png](./image/chapter2/container1.png)
+
+    - 바로 직전 컨테이너 생성 코드를 통해 스프링 컨테이너가 생성되었고 빈 저장소는 비어있다.
+
+2. 스프링 빈 등록
+![class_diagram.png](./image/chapter2/container2.png)
+
+    - AppConfig에 @Bean 어노테이션이 붙은 자바 메소드를 호출하여 스프링 빈을 등록한다.
+    
+3. 스프링 빈 의존관계 설정
+![class_diagram.png](./image/chapter2/container3.png)
+    
+    - 컨테이너 설정 정보를 참고해서 의존관계를 주입 한다.
+    - 단순히 이전에 자바코드로써 의존관계를 주입한 것에 비해 스프링 컨테이너는 싱글톤 컨테이너 이다.
+
+#### 컨테이너에 등록된 빈 조회 테스트
+- core/test/java/OOP.core/beanfind  
+    - getBeanDefinitionNames() : 컨테이너에 등록된 모든 빈 이름들 반환
+    - getBean() : 등록된 빈의 객체 주소 값 반환, 빈 이름 또는 타입으로 조히 가능
+    - getRole() : 스프링에서 정한 빈 역할을 반환
+                
+        ROLE_APPLICATION: 직접 등록한 애플리케이션 빈
+        ROLE_INFRASTRUCTURE: 스프링이 내부에서 사용하는 빈
+    - getBeansOfType(): 특정 빈 타입 모두 반환
+
+#### BeanFactory와 ApllicationContext
+
+![class_diagram.png](./image/chapter2/container4.png)
+- BeanFatory
+
+    - 스프링 컨테이너 최상위 인터페이스로써,  스프링 빈을 관리하고 조회하는 역할을 담당한다.
+    - getBean()을 제공한다.
+
+- ApplicationContext
+
+    - BeanFactory 기능을 모두 상속받아서 제공할 뿐만 아니라, 메시지 소스 국제화, 환경변수, 어플리케이션 이벤트, 편리한 리소스 조회와 같은
+    다양한 기능 또한 제공한다.
+    
+#### 다양한 설정 형식 지원
+
+![class_diagram.png](./image/chapter2/container5.png)
+- 스프링은 BeanDefintion이라는 **빈 설정 메타정보**를 추상화 시켰기 떄문에 다양한 설정 형식을 지원한다.
+- 이러한 기능을 설계한 것 역시 객체 지향 설계라고 할 수 있다.
 ### 싱글톤 컨테이너
 
 ### 컴포넌트 스캔
