@@ -347,3 +347,12 @@ static class ClientBean {
 
  ![web1.PNG](./image/chapter8/web1.png)
 - 웹스코프는 웹환경에서만 동작하며, 스프링이 해당 스코프의 종료시점 까지 관리한다.
+
+
+
+
+
+
+
+#### 출처
+- 인프런 강의 스프링 핵심 원리 -기본편- https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81-%ED%95%B5%EC%8B%AC-%EC%9B%90%EB%A6%AC-%EA%B8%B0%EB%B3%B8%ED%8E%B8
