@@ -216,8 +216,8 @@ OCP를 위반하게 되어 코드의 유연성이 떨어지게 된다.
      * 필드 주입
      */
     //@Autowired
-    private final MemberRepository memberRepository;
-    private final DiscountPolicy discountPolicy; //DIP 원칙을 위배하지 않음
+    private MemberRepository memberRepository;
+    private DiscountPolicy discountPolicy; //DIP 원칙을 위배하지 않음
 
     /**
      * 생성자 주입
